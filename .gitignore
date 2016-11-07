@@ -1,47 +1,10 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
-
-# Folder config file
-Desktop.ini
-
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
-
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
-.DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear in the root of a volume
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
+src/ClinicaFrba/ClinicaFrba/obj/Debug/ClinicaFrba.csproj.FileListAbsolute.txt
+src/ClinicaFrba/ClinicaFrba/obj/Debug/ClinicaFrba.csproj.FileListAbsolute.txt
+src/ClinicaFrba/ClinicaFrba/obj/Debug/ClinicaFrba.csproj.FileListAbsolute.txt
+src/ClinicaFrba/ClinicaFrba/obj/Debug/DesignTimeResolveAssemblyReferences.cache
+src/ClinicaFrba/ClinicaFrba/obj/Debug/ClinicaFrba.csproj.FileListAbsolute.txt
+src/ClinicaFrba/.vs/ClinicaFrba/v14/.suo
+src/ClinicaFrba/ClinicaFrba.v11.suo
+src/ClinicaFrba/ClinicaFrba/bin/Debug/ClinicaFrba.vshost.exe
+src/ClinicaFrba/ClinicaFrba/obj/Debug/ClinicaFrba.csproj.FileListAbsolute.txt
+src/ClinicaFrba/ClinicaFrba/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
