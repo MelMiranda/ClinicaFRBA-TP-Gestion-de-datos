@@ -1,6 +1,6 @@
-﻿namespace ClinicaFrba.LogIn
+﻿namespace ClinicaFrba.Abm_Afiliado
 {
-    partial class InputDialog
+    partial class AltaFamiliar
     {
         /// <summary>
         /// Required designer variable.
@@ -28,48 +28,50 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
-            this.text_password = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(52, 125);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(129, 26);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Cambiar contraseña!";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // text_password
-            // 
-            this.text_password.Location = new System.Drawing.Point(52, 87);
-            this.text_password.Name = "text_password";
-            this.text_password.PasswordChar = '*';
-            this.text_password.Size = new System.Drawing.Size(129, 20);
-            this.text_password.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(49, 56);
+            this.label1.Location = new System.Drawing.Point(98, 59);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(98, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Nueva contraseña:";
+            this.label1.Size = new System.Drawing.Size(261, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Afiliado creado con éxito, desea agregarle un familiar?";
             // 
-            // InputDialog
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(190, 91);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Si";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(190, 120);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "No";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // AltaFamiliar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 262);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.text_password);
+            this.ClientSize = new System.Drawing.Size(445, 198);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
-            this.Name = "InputDialog";
-            this.Text = "Cambio de Contrasena";
+            this.Controls.Add(this.label1);
+            this.Name = "AltaFamiliar";
+            this.Text = "Alta de Familiar";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -77,8 +79,8 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox text_password;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
     }
 }

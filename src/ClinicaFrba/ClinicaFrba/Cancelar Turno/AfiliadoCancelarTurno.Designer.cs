@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.dataGridTurnos = new System.Windows.Forms.DataGridView();
-            this.label1 = new System.Windows.Forms.Label();
             this.buttonCancelarTurno = new System.Windows.Forms.Button();
             this.richTextMotivo = new System.Windows.Forms.RichTextBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,15 +45,7 @@
             this.dataGridTurnos.Size = new System.Drawing.Size(621, 164);
             this.dataGridTurnos.TabIndex = 0;
             this.dataGridTurnos.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridTurnos_CellClick);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(25, 13);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(140, 13);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "Seleccione turno a cancelar";
+            this.dataGridTurnos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridTurnos_CellContentClick);
             // 
             // buttonCancelarTurno
             // 
@@ -110,10 +101,9 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.richTextMotivo);
             this.Controls.Add(this.buttonCancelarTurno);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridTurnos);
             this.Name = "AfiliadoCancelarTurno";
-            this.Text = "AfiliadoCancelarTurno";
+            this.Text = "Cancelacion de Turnos";
             this.Load += new System.EventHandler(this.AfiliadoCancelarTurno_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridTurnos)).EndInit();
             this.ResumeLayout(false);
@@ -121,10 +111,10 @@
 
         }
 
+
         #endregion
 
         private System.Windows.Forms.DataGridView dataGridTurnos;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button buttonCancelarTurno;
         private System.Windows.Forms.RichTextBox richTextMotivo;
         private System.Windows.Forms.Label label2;

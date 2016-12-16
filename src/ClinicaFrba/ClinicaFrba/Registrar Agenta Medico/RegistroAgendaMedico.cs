@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Globalization;
+using ClinicaFrba.Interfaz;
+using System.Configuration;
+
 
 
 
@@ -18,50 +21,314 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
 
     public partial class RegistrarAgenda : Form
     {
-        public int user_id=5553;
-        //variable que debee ser accedida globalmente;
+
+        public int user_id =Convert.ToInt32(Interfaz.Interfaz.usuario.Id_usuario);
+       
         public int retorno;
 
-        
+        public int id_agenda;
+
+        List<string> virtualDays = new List<string>();
+
+        public bool boolSabado=false;
+
+        public int id_profesional;
+
+        //string[] diasLaborales = { };
+
+        List<List<string>> diasLaborales = new List<List<string>>();
 
         public RegistrarAgenda()
         {
             InitializeComponent();
         }
 
-        private void RegistrarAgenda_Load(object sender, System.EventArgs e)
+        private void Aceptar_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                //comboBox1.Items.Clear();
-                SqlCommand cmd = new SqlCommand("SELECT Descripcion FROM TRIGGER_EXPLOSION.Especialidad ", ManejadorConexiones.conectar());
-                cmd.ExecuteNonQuery();
-                DataTable data = new DataTable();
-                SqlDataAdapter da = new SqlDataAdapter(cmd);
-                da.Fill(data);
 
-                foreach (DataRow dr in data.Rows)
+            diasLaborales.Clear();
+
+
+            id_profesional = getProfesionalId();
+
+            generarArrayDias();
+
+          
+            if (checkCampos() && CheckRangoHorario() && check48Horas() && CheckExistenciaEspecialidad())
+            {
+
+                AgregarDataEnAgenda();
+
+                AgregarEnDiasDisponibles();
+
+                MessageBox.Show("Carga de Agenda exitosa!!");
+                this.Close();
+               
+                
+            }
+  
+        }
+
+        public void generarArrayDias()
+        {
+
+            CheckBox[] dias = { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado};
+
+            int i;
+
+
+            for (i = 0; i < dias.Length; i++)
+            {
+                List<string> tupla = new List<string>();
+
+
+                if (dias[i].Checked)
                 {
-                    comboBox1.Items.Add(dr["Descripcion"]).ToString();
-                    //comboBox1.Text = comboBox1.SelectedItem.ToString();
-                    //Arreglar 
+                            if (dias[i].Text != "Sábado")
+                            {
+                                tupla.Add(dias[i].Text);
+                                if(horaInit.Text.Length!=0){ tupla.Add(horaInit.Text);};
+                                if (horaFin.Text.Length != 0) { tupla.Add(horaFin.Text); };
+                                
+                            }
+                            else {
+                                tupla.Add(dias[i].Text);
+                                if(horaInitS.Text.Length!=0){ tupla.Add(horaInitS.Text);};
+                                if(horaFinS.Text.Length!=0){ tupla.Add(horaFinS.Text);};
+                            }
+                            diasLaborales.Add(tupla);
+                            Console.WriteLine(tupla);
+                }
+                
+                
+
+           }
+
+
+
+
+        }
+
+        private bool checkCampos()
+        {
+            if (FechaFin.Text.Length == 0 || FechaInit.Text.Length == 0 || comboBox1.Text.Length == 0)
+            {
+                MessageBox.Show("Algunos campos no pueden estar vacios");
+
+                return false;
+            } 
+            
+            if (diasLaborales.Count != 0)
+            {
+
+                for(int i=0; i< diasLaborales.Count; i++){
+                    
+                    if(diasLaborales[i].Count!=3){
+                        MessageBox.Show("Los rangos horarios deben estar completos");
+                        return false;
+                    };
+
+                   
+            
+                }
+
+                try
+                {
+                    string format = "yyyy-MM-dd";
+                    var provider = new CultureInfo("es-AR");
+                    DateTime.ParseExact(FechaInit.Text, format, provider);
+                    DateTime.ParseExact(FechaFin.Text, format, provider);
+
+                    DateTime fechaInicial = DateTime.ParseExact(FechaInit.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+                    DateTime fechaFinal = DateTime.ParseExact(FechaFin.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+                    //string fechaS =ConfigurationManager.AppSettings["fechaSistema"];   
+                    //string fechaSis = fechaS.ToString("yyyy-MM-dd");  
+                    DateTime fechaSistema = DateTime.ParseExact(ConfigurationManager.AppSettings["fechaSistema"], "dd/MM/yyyy HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+                    if (fechaInicial.Date < fechaSistema.Date || fechaFinal.Date < fechaInicial.Date)
+                    {
+                        MessageBox.Show("Las fechas ingresadas no son posteriores a la fecha del sistema ó la fecha incial es superior a la final");
+                        return false;
+                    }
+
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Datos ingresados en un formato incorrecto");
+                    return false;
+                }
+
+                return true;
+
+            }else{
+                MessageBox.Show("Debe elegir almenos un dia para la agenda");
+                return false;
+            }
+
+        }
+        
+        public bool CheckRangoHorario()
+        {
+
+            DateTime LimiteSabInicial = DateTime.ParseExact("10:00", "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime LimiteSabFinal= DateTime.ParseExact("15:00", "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+            DateTime limiteInicial = DateTime.ParseExact("07:00", "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+            DateTime limiteFinal = DateTime.ParseExact("20:00", "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+            for (int i = 0; i < diasLaborales.Count;i++ ) {
+
+
+               DateTime timeInicial = DateTime.ParseExact(diasLaborales[i][1].ToString(), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+               DateTime timeFinal = DateTime.ParseExact(diasLaborales[i][2].ToString(), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+               if (timeFinal  < timeInicial)
+               {
+                        MessageBox.Show("Los horarios estan ingresados de manera incorrecta, la Hora inicial debe ser inferior a la hora final");
+
+                        return false;
+                   }
+            
+            }
+
+            return true;
+        }
+
+
+        private bool check48Horas()
+        {
+            double totalHoras = 0;
+
+            for (int i = 0; i < diasLaborales.Count; i++)
+            {
+
+                DateTime timeInicial = DateTime.ParseExact(diasLaborales[i][1].ToString(), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+                DateTime timeFinal = DateTime.ParseExact(diasLaborales[i][2].ToString(), "HH:mm", System.Globalization.CultureInfo.InvariantCulture);
+
+                TimeSpan difference = timeFinal - timeInicial;
+                double diffInHours = difference.TotalHours;
+                totalHoras = totalHoras + diffInHours;
+
+            }
+
+
+            String query = "select (SUM(DATEDIFF(MINUTE,dd.inicio_jornada,dd.fin_jornada)) / 60) FROM TRIGGER_EXPLOSION.Dias_disponible dd JOIN TRIGGER_EXPLOSION.Agenda ag ON dd.Id_agenda = ag.Id_agenda JOIN TRIGGER_EXPLOSION.Profesional p ON ag.Id_profesional = p.Id_profesional and p.Id_profesional = " + id_profesional + "and dd.Dia != 'Domingo' group by p.Id_profesional";
+            SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar());
+
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+
+                if (reader.Read())
+                { // ya tiene una agenda registrada, cuento los dias laborales que ya tiene
+
+                    var a = reader.GetValue(0);
+
+
+                    if ((Convert.ToInt32(a) + totalHoras) > 48)
+                    {
+                        MessageBox.Show("La sumatoria de sus agendas superan las 48 horas semanales");
+                        reader.Close();
+                        return false;
+                    }
+                    else
+                    {
+                        reader.Close(); 
+                        return true;
+                    }
+                    
+
+                }
+                else
+                {// no tiene ninguna agenda registrada
+                    if ((totalHoras) > 48) { MessageBox.Show("Los horarios superan las 48 horas semanales"); return false; } else { return true; }
                 }
 
 
             }
-            catch (System.Exception ex)
+
+
+
+
+        }
+
+        private void AgregarDataEnAgenda()
+        {
+           
+                using (SqlConnection sqlConnection = ManejadorConexiones.conectar())
+                {//FORMAT(Now(),'YYYY-MM-DD')
+
+                    DateTime fechaInicial = DateTime.ParseExact(FechaInit.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+                    DateTime fechaFinal = DateTime.ParseExact(FechaFin.Text, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+
+                    string query = "INSERT INTO TRIGGER_EXPLOSION.Agenda (Id_profesional, Fecha_inicio,Fecha_fin, Especialidad)VALUES (" + id_profesional + ",  '" + fechaInicial + "' ,'" + fechaFinal + "', '" + comboBox1.Text + "')";
+      
+                    SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar()); 
+
+                    cmd.ExecuteNonQuery();
+
+                    
+                }
+
+
+               
+           
+        }
+
+
+        private bool CheckExistenciaEspecialidad() {
+
+            string query = "select * from TRIGGER_EXPLOSION.Agenda where id_profesional =" + id_profesional + " and Especialidad='" + comboBox1.Text + "'";
+
+
+            SqlCommand sqlCommand = new SqlCommand(query, ManejadorConexiones.conectar());
+
+            SqlDataReader reader = sqlCommand.ExecuteReader();
+
+
+            if (reader.HasRows)
             {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
+                reader.Close();
+                MessageBox.Show("Ya existe una agenda con la especialidad seleccionada");
+                return false;
+            }
+            else {
+                reader.Close();
+                return true;
             }
         }
-
-
-        private void label1_Click(object sender, EventArgs e)
+        
+        
+        private void AgregarEnDiasDisponibles()
         {
-             
+
+            if (getIdAgenda()) {
+
+                for (int i = 0; i < diasLaborales.Count; i++) {
+
+                    string insertSabado = "insert into TRIGGER_EXPLOSION.Dias_disponible (Id_agenda, Dia, inicio_jornada, fin_jornada) values(" + id_agenda + ",'" + diasLaborales[i][0].ToString() + "','" + diasLaborales[i][1].ToString() + "', '" + diasLaborales[i][2].ToString() + "')";
+
+
+                        SqlCommand cmd = new SqlCommand(insertSabado, ManejadorConexiones.conectar()); //Agregar este Stored
+
+                        cmd.ExecuteNonQuery();
+
+               
+                }
+
+                return;
+            };
+
+            
+            return;
         }
 
-    
+
+
+
+
 
         public int  getProfesionalId() {
 
@@ -90,7 +357,7 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             }
             else
             {
-                Console.WriteLine("No es un numero de profesional valido");
+                MessageBox.Show("No es un numero de profesional valido");
                 reader.Close();
             }
 
@@ -99,49 +366,18 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             return 1;
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-        private void Aceptar_Click_1(object sender, EventArgs e){
-
- 
-            int id_profesional = getProfesionalId();
-
-           // getDisponibilidad();
-            
-
-            if(checkCampos()){
-
-                if (CheckExistencia(id_profesional))
-                {
-                    try
-                    {
-                        AgregarDataEnAgenda(id_profesional);
-                        MessageBox.Show("Carga Existosa");
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Error en la carga. Intente nuevamente");
-                    };
-                    //termina if pos
-                }
-                else {
-                    MessageBox.Show("No hay disponibilidad en el horario especificado");
-                }
-
-               
-
-                
-            }           
-
-       
-        
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void RegistrarAgenda_Load_1(object sender, EventArgs e)
         {
+
             try
             {
                 comboBox1.Items.Clear();
-                SqlCommand cmd = new SqlCommand("SELECT Descripcion FROM TRIGGER_EXPLOSION.Especialidad ", ManejadorConexiones.conectar());
+                SqlCommand cmd = new SqlCommand("select Descripcion from  TRIGGER_EXPLOSION.ProfesionalXEspecialidad,  TRIGGER_EXPLOSION.Especialidad where id_profesional="+getProfesionalId()+" and Especialidad.Id_especialidad=ProfesionalXEspecialidad.Id_especialidad", ManejadorConexiones.conectar());
                 cmd.ExecuteNonQuery();
                 DataTable data = new DataTable();
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
@@ -158,50 +394,100 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
+
         }
 
+      
+        public bool getIdAgenda() {
+
+            string sender = "select Id_agenda from TRIGGER_EXPLOSION.Agenda where Id_profesional="+id_profesional+" and Especialidad='"+comboBox1.Text+"'";
+           
 
 
-       
+           
+            Console.WriteLine(sender);
+            SqlCommand sqlCommand = new SqlCommand(sender, ManejadorConexiones.conectar());
 
-     
-        private bool checkCampos() {
+            SqlDataReader reader = sqlCommand.ExecuteReader();
 
-            if (FechaInit.Text.Length == 0 || FechaFin.Text.Length == 0 || comboBox1.Text.Length == 0 || horaInit.Text.Length == 0 || horaFin.Text.Length==0)
+
+            if (reader.HasRows)
             {
-                MessageBox.Show("Los campos no pueden estar vacios");
-                return false;
-                
+                while (reader.Read())
+                {
+                    var a = reader.GetValue(0);
 
-                }else{
-                    return true;
+
+                    id_agenda = Convert.ToInt32(a);
                 }
 
-          //   FechaInit.Text,FechaFin.Text,comboBox1.Text, horaInit.Text,horaFin.Text 
-       
+                reader.Close();
+
+                return true;
+            }
+            else
+            {
+               
+         
+
+                reader.Close();
+                MessageBox.Show("Hubo un error en el cargado De los dias disponibles");
+                
+                return false;
+
+
+            }
+
+            
+
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void horaInit_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void RegistrarAgenda_Load_1(object sender, EventArgs e)
+        private void horaFin_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Miercoles_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Jueves_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Viernes_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Sabado_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Lunes_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Martes_CheckedChanged(object sender, EventArgs e)
         {
 
         }
 
         private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void horaInit_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void horaFin_TextChanged(object sender, EventArgs e)
         {
 
         }
@@ -216,52 +502,26 @@ namespace ClinicaFrba.Registrar_Agenta_Medico
 
         }
 
-        private void AgregarDataEnAgenda(int id) { 
-
-                 using (SqlConnection sqlConnection = ManejadorConexiones.conectar())
-            {
-                string query = "INSERT INTO TRIGGER_EXPLOSION.Agenda (Id_profesional, Fecha_inicio,Fecha_fin, Especialidad)VALUES (" + id + ", '" + FechaInit.Text+" "+horaInit.Text+ "','" + FechaFin.Text +" "+horaFin.Text+"', '" + comboBox1.GetItemText(this.comboBox1.SelectedItem)+ "')";
-
-                SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar()); //Agregar este Stored
-               
-           
-
-                //(EndDate - StartDate).TotalDays
-                  //dateValue.ToString("dddd", new CultureInfo("es-ES"))
-                cmd.ExecuteNonQuery();
-
-
-                //@id_profesional, @fecha_init, @fecha_fin, @especialidad
+        private void fillByToolStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
 
         }
+
+        
+
+        private void horaInitS_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
-        private bool CheckExistencia(int id) {
-
-
-            using (SqlConnection sqlConnection = ManejadorConexiones.conectar())
-            {
-                string query = "SELECT Id_agenda FROM TRIGGER_EXPLOSION.Agenda WHERE Id_profesional="+id+" AND ( '" + FechaInit.Text + " " + horaInit.Text + "'<= Fecha_inicio AND '" + FechaFin.Text + " " + horaFin.Text + "'>= Fecha_fin OR '" + FechaInit.Text + " " + horaInit.Text + "'>= Fecha_inicio AND '" + FechaFin.Text + " " + horaFin.Text + "'<= Fecha_fin )";
-
-
-                SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar()); //Agregar este Stored
-                cmd.ExecuteNonQuery();
-
-                using (var reader = cmd.ExecuteReader())
-                {
-                    reader.Read();
-
-                    if (reader.HasRows) { 
-                        return false; 
-                         }else { return true; }
-                }
-            }
-
-
+        private void horaFinS_SelectedIndexChanged(object sender, EventArgs e)
+        {
             
         }
 
 }
 }
+
+
 
    

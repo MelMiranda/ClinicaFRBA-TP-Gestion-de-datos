@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using ClinicaFrba.Clases;
+using System.Configuration;
 
 namespace ClinicaFrba.Cancelar_Turno
 {
     public partial class AfiliadoCancelarTurno : Form
     {
-        Int32 Id_turno = -1;
+        Int64 Id_turno = -1;
         Interfaz.Interfaz interfaz = new Interfaz.Interfaz();
 
         public AfiliadoCancelarTurno()
@@ -26,6 +27,7 @@ namespace ClinicaFrba.Cancelar_Turno
         {
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("username", Repositorio.getUserActual().getUserId()));
+            parametros.Add(new SqlParameter("fecha_actual", Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"])));
             Interfaz.Interfaz.cargarGrillaSP(dataGridTurnos, "TRIGGER_EXPLOSION.turnos_dia_siguiente", parametros);
             
             if (dataGridTurnos.RowCount <= 0)
@@ -36,6 +38,8 @@ namespace ClinicaFrba.Cancelar_Turno
 
            
             interfaz.cargarComboIDValor(comboBox1, "select t.Id_tipo_cancelacion id, t.Descripcion valor from TRIGGER_EXPLOSION.TipoCancelacion t");
+            interfaz.agregarElementoTextoAChequear(richTextMotivo);
+            interfaz.agregarElementoComboBoxAChequear(comboBox1);
 
         }
 
@@ -45,8 +49,15 @@ namespace ClinicaFrba.Cancelar_Turno
             {
                 MessageBox.Show("Por favor, seleccione del listado el turno que desea cancelar");
             }
+            else if (interfaz.elementosEstanIncompletos())
+            {
+                MessageBox.Show("Por favor, informe los elementos que le pide el formulario");
+                return;
+            } 
             else
             {
+
+
                 List<SqlParameter> parametros = new List<SqlParameter>();
                 parametros.Add(new SqlParameter("id_turno", Id_turno));
                 parametros.Add(new SqlParameter("motivo_cancelacion", richTextMotivo.Text));
@@ -60,7 +71,12 @@ namespace ClinicaFrba.Cancelar_Turno
         private void dataGridTurnos_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             int FilaSeleccionada = e.RowIndex;
-            Id_turno = Convert.ToInt32(dataGridTurnos.Rows[FilaSeleccionada].Cells["Turno"].Value.ToString());
+            Id_turno = Convert.ToInt64(dataGridTurnos.Rows[FilaSeleccionada].Cells["Turno"].Value.ToString());
+        }
+
+        private void dataGridTurnos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

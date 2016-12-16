@@ -24,7 +24,9 @@ IF OBJECT_ID('TRIGGER_EXPLOSION.Afiliado', 'U') IS NOT NULL
 	ALTER TABLE TRIGGER_EXPLOSION.Afiliado DROP CONSTRAINT	FK_Afiliado_Usuario;
 	ALTER TABLE TRIGGER_EXPLOSION.Afiliado DROP CONSTRAINT	FK_Afiliado_Conyuge;
 	ALTER TABLE TRIGGER_EXPLOSION.Afiliado DROP CONSTRAINT	FK_Afiliado_EstadoCivil;
+	ALTER TABLE TRIGGER_EXPLOSION.Afiliado DROP CONSTRAINT	FK_Afiliado_Padre;
 	END
+	
 IF OBJECT_ID('TRIGGER_EXPLOSION.Profesional', 'U') IS NOT NULL 
 	BEGIN
 	ALTER TABLE TRIGGER_EXPLOSION.Profesional DROP CONSTRAINT FK_Profesional_Tipo_documento;
@@ -76,7 +78,7 @@ DROP PROCEDURE TRIGGER_EXPLOSION.baja_afiliado;
 DROP PROCEDURE TRIGGER_EXPLOSION.getAfiliados;
 DROP PROCEDURE TRIGGER_EXPLOSION.modificar_afiliado; 
 
- 
+DROP PROCEDURE TRIGGER_EXPLOSION.asignarFuncionalidad; 
 DROP PROCEDURE TRIGGER_EXPLOSION.SP_altaRol;
 DROP PROCEDURE TRIGGER_EXPLOSION.SP_bajaRol;
 DROP PROCEDURE TRIGGER_EXPLOSION.SP_CambiarPassword;
@@ -92,10 +94,41 @@ DROP PROCEDURE TRIGGER_EXPLOSION.GetDisponibilidadPorIdUsuario;
 DROP FUNCTION TRIGGER_EXPLOSION.GetProfesionalId;
 DROP FUNCTION TRIGGER_EXPLOSION.getFuncDelRol;
 DROP PROCEDURE TRIGGER_EXPLOSION.comprarBonos;
+DROP function TRIGGER_EXPLOSION.AfiliadosBonos;
+DROP PROCEDURE TRIGGER_EXPLOSION.GetIdAfiliado;
+DROP PROCEDURE TRIGGER_EXPLOSION.GetIdProfesional;
+DROP function TRIGGER_EXPLOSION.ProfesionalesConsultados;
+DROP procedure TRIGGER_EXPLOSION.getFuncionalidades;
 
 DROP PROCEDURE TRIGGER_EXPLOSION.turnos_dia_siguiente;
 drop procedure TRIGGER_EXPLOSION.cancelar_turno;
 drop procedure TRIGGER_EXPLOSION.cancelar_turno_fechaEspecifica;
+drop procedure TRIGGER_EXPLOSION.cancelar_turno_rangoDeFechas;
+drop function TRIGGER_EXPLOSION.EspecialidadesBonos;
+drop function TRIGGER_EXPLOSION.EspecialidadesBonos; -- Esta duplicado esto?
+drop procedure TRIGGER_EXPLOSION.InsertarDiasPorDisponibilidad;
+drop procedure TRIGGER_EXPLOSION.InsertDisponibilidadPorIdUsuario;
+drop PROCEDURE TRIGGER_EXPLOSION.ProfesionalesConsultados;
+drop procedure TRIGGER_EXPLOSION.SP_PrimeraVez;
+drop function TRIGGER_EXPLOSION.EspecialidadesCanceladas;
+drop function TRIGGER_EXPLOSION.EspecialidadesCanceladas;
+drop function TRIGGER_EXPLOSION.ProfesionalesHoras;
+drop function TRIGGER_EXPLOSION.FX_get_Disponibilidad;
+drop function TRIGGER_EXPLOSION.getFechasDeTurnos;
+drop function TRIGGER_EXPLOSION.getCantidadHorasEnLaSemana;
+drop function TRIGGER_EXPLOSION.YaExisteAfiliadoConDocumento;
+drop procedure TRIGGER_EXPLOSION.EliminarFuncionalidades;
+drop procedure TRIGGER_EXPLOSION.ExisteRol;
+drop procedure TRIGGER_EXPLOSION.FuncionalidadesPorRol;
+drop function TRIGGER_EXPLOSION.getHorarioDisponibleDelDia;
+drop procedure TRIGGER_EXPLOSION.getRoles;
+drop procedure TRIGGER_EXPLOSION.inhabilitarRolXUsuario;
+drop procedure TRIGGER_EXPLOSION.getRolesHabilitados;
+drop procedure TRIGGER_EXPLOSION.ModificarNombreRol;
+drop procedure TRIGGER_EXPLOSION.obtenerFuncionalidadId;
+drop procedure TRIGGER_EXPLOSION.obtenerRolId;
+drop function TRIGGER_EXPLOSION.ProfesionalesHoras;
+drop procedure TRIGGER_EXPLOSION.RolHabilitado;
 
 DROP FUNCTION TRIGGER_EXPLOSION.SP_validarRol;
 ----------------------------------------------------------------------

@@ -18,8 +18,10 @@ namespace ClinicaFrba
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Registro_Llegada.RegistroDeLlegada());
             //Application.Run(new Registrar_Agenta_Medico.RegistrarAgenda());
-            Application.Run(new Pedir_Turno.Gestion_turno());
-             //Application.Run(new LogIn.LogIn());
+            //Application.Run(new Pedir_Turno.Gestion_turno());
+            //Application.Run(new Estadisticas.Estadisticas());
+            //Application.Run(new LogIn.LogIn());
+            Application.Run(new LogIn.LogIn());
             //Descomentar.
         }
     }

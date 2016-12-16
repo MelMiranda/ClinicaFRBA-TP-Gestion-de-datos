@@ -9,11 +9,11 @@ namespace ClinicaFrba
     class Agenda
     {
     
-         private String matricula;
-         private String nombre;
-         private String especialidad;
+        // private String matricula;
+       //  private String nombre;
+        // private String especialidad;
 
-        private List<Dia> diasDisponibles;
+        //private List<Dia> diasDisponibles;
 
         public void getDisponibilidad(string nombre, int matricula, string especialidad  ) 
         {

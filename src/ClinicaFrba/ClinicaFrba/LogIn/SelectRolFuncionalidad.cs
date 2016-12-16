@@ -16,6 +16,8 @@ using ClinicaFrba.Registrar_Agenta_Medico;
 using ClinicaFrba.Registro_Resultado;
 using ClinicaFrba.Cancelar_Turno;
 using ClinicaFrba.Estadisticas;
+using ClinicaFrba.Registro_Llegada;
+using ClinicaFrba.AbmRol;
 
 namespace ClinicaFrba.LogIn
 {
@@ -77,7 +79,7 @@ namespace ClinicaFrba.LogIn
         {
             switch (comboBox2.Text)
             {
-                case "Ver Agenda":
+                case "Cargar Agenda":
 
                     RegistrarAgenda registroAgenda = new RegistrarAgenda();
                     registroAgenda.ShowDialog();
@@ -95,11 +97,12 @@ namespace ClinicaFrba.LogIn
                     abmAfiliado.ShowDialog();
                     break;
                 case "ABM Rol":
-                    ABMRol abmRol = new ABMRol();
+                    GestionarRoles abmRol = new GestionarRoles();
                     abmRol.ShowDialog();
                     break;
                 case "Estadisticas":
-                    //Linkear con las estadísticas
+                    Estadisticas.Estadisticas estadistica = new Estadisticas.Estadisticas();
+                    estadistica.ShowDialog();
                     break;
                 case "Cancelar Turno":
                     if (comboBox1.Text == "Afiliado")
@@ -116,6 +119,10 @@ namespace ClinicaFrba.LogIn
                 case "Registrar Diagnostico":
                     RegistrarResultado diagnostico = new RegistrarResultado();
                     diagnostico.ShowDialog();
+                    break;
+                case "Registrar Llegada Paciente":
+                    RegistroDeLlegada llegada = new RegistroDeLlegada();
+                    llegada.ShowDialog();
                     break;
             }
         }

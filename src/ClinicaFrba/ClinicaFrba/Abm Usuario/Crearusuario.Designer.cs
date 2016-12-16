@@ -63,7 +63,7 @@
             // Box_user
             // 
             this.Box_user.Location = new System.Drawing.Point(210, 41);
-            this.Box_user.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Box_user.Margin = new System.Windows.Forms.Padding(2);
             this.Box_user.Name = "Box_user";
             this.Box_user.Size = new System.Drawing.Size(92, 20);
             this.Box_user.TabIndex = 2;
@@ -71,7 +71,7 @@
             // Box_password
             // 
             this.Box_password.Location = new System.Drawing.Point(210, 74);
-            this.Box_password.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Box_password.Margin = new System.Windows.Forms.Padding(2);
             this.Box_password.Name = "Box_password";
             this.Box_password.Size = new System.Drawing.Size(92, 20);
             this.Box_password.TabIndex = 3;
@@ -95,7 +95,7 @@
             "Profesional",
             "Administrador"});
             this.Box_rol.Location = new System.Drawing.Point(210, 111);
-            this.Box_rol.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Box_rol.Margin = new System.Windows.Forms.Padding(2);
             this.Box_rol.Name = "Box_rol";
             this.Box_rol.Size = new System.Drawing.Size(92, 21);
             this.Box_rol.TabIndex = 5;
@@ -103,7 +103,7 @@
             // btn_save
             // 
             this.btn_save.Location = new System.Drawing.Point(377, 583);
-            this.btn_save.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_save.Margin = new System.Windows.Forms.Padding(2);
             this.btn_save.Name = "btn_save";
             this.btn_save.Size = new System.Drawing.Size(56, 19);
             this.btn_save.TabIndex = 6;
@@ -113,7 +113,7 @@
             // btn_clean
             // 
             this.btn_clean.Location = new System.Drawing.Point(32, 583);
-            this.btn_clean.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btn_clean.Margin = new System.Windows.Forms.Padding(2);
             this.btn_clean.Name = "btn_clean";
             this.btn_clean.Size = new System.Drawing.Size(56, 19);
             this.btn_clean.TabIndex = 7;
@@ -129,9 +129,9 @@
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(32, 11);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
             this.groupBox1.Size = new System.Drawing.Size(402, 552);
             this.groupBox1.TabIndex = 8;
             this.groupBox1.TabStop = false;
@@ -146,9 +146,9 @@
             this.Controls.Add(this.btn_clean);
             this.Controls.Add(this.btn_save);
             this.Controls.Add(this.groupBox1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Crearusuario";
-            this.Text = "Crearusuario";
+            this.Text = "Alta de Usuario";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);

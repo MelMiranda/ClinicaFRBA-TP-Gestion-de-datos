@@ -27,23 +27,55 @@ namespace ClinicaFrba.Estadisticas
         {
             if (cboAño.Text != "" && cboMes.Text != "")
             {
-                
-                SqlCommand cargar = new SqlCommand("TRIGGER_EXPLOSION.AfiliadosBonos", ManejadorConexiones.conectar());
-                cargar.CommandType = CommandType.StoredProcedure;
-                cargar.Parameters.Add("@Semestre", SqlDbType.Int).Value = cboSemestre.Text;
-                cargar.Parameters.Add("@Mes", SqlDbType.Int).Value = cboMes.SelectedValue;
-                cargar.Parameters.Add("@Año", SqlDbType.VarChar).Value = cboAño.Text;
-                SqlDataAdapter adapter = new SqlDataAdapter(cargar);
-                DataTable table = new DataTable();
-                adapter.Fill(table);
-                dataGridView1.DataSource = table;
-                ManejadorConexiones.desconectar();
-                
+
+                try
+                {
+                    int anio, mes, semestre;
+                    anio = Convert.ToInt32(cboAño.SelectedItem.ToString());
+                    String mesString = cboMes.SelectedValue.ToString();
+                    mes = Convert.ToInt32(mesString);
+                    semestre = Convert.ToInt32(cboSemestre.SelectedItem.ToString());
+
+
+                    DataTable dt = new DataTable();
+
+                    String query = "SELECT * from TRIGGER_EXPLOSION.AfiliadosBonos(@Semestre,@Mes,@Anio) ";
+
+                    SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar());
+                    cmd.Parameters.Add("@Semestre", SqlDbType.Int).Value = semestre;
+                    cmd.Parameters.Add("@Mes", SqlDbType.Int).Value = mes;
+                    cmd.Parameters.Add("@Anio", SqlDbType.Int).Value = anio;
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+
+                        adapter.Fill(dt);
+                        cmd.Dispose();
+                        ManejadorConexiones.desconectar();
+                        if (dt.Rows.Count == 0)
+                        {
+                            Interfaz.Interfaz.mostrarMensaje("No hay ningun afiliado para los parametros seleccionados!");
+                        }
+                        else
+                        {
+                            dataGridView1.DataSource = dt;
+                        }
+
+                        
+                    }
+
+
+                }
+                catch (Exception ex)
+                {
+                    Interfaz.Interfaz.mostrarMensaje("Consulta cancelada, revise los parametros seleccionados ");
+                    ManejadorConexiones.desconectar();
+                }
+
+
             }
             else
             {
                 MessageBox.Show("Complete los criterios de busqueda");
-
             }
         }
 

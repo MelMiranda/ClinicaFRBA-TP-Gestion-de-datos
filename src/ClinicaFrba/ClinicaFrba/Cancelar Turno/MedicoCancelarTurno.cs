@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace ClinicaFrba.Cancelar_Turno
 {
@@ -28,6 +29,14 @@ namespace ClinicaFrba.Cancelar_Turno
             }
             else
             {
+                if (interfaz.elementosEstanIncompletos())
+                {
+                    MessageBox.Show("Por favor, informe los elementos que le pide el formulario");
+                    return;
+                } 
+                
+
+
                 if (!checkCancelarPorRango.Checked)
                 {
                     List<SqlParameter> parametros = new List<SqlParameter>();
@@ -38,6 +47,12 @@ namespace ClinicaFrba.Cancelar_Turno
                 }
                 else
                 {
+                    if (dateTimeFechaInicio.Value > dateTimeFechaFin.Value)
+                    {
+                        MessageBox.Show("La fecha de inicio debe ser menor a la de fin");
+                        return;
+                    }
+
                     List<SqlParameter> parametros = new List<SqlParameter>();
                     parametros.Add(new SqlParameter("fechaInicio", dateTimeFechaInicio.Value));
                     parametros.Add(new SqlParameter("fechaFin", dateTimeFechaFin.Value));
@@ -56,10 +71,14 @@ namespace ClinicaFrba.Cancelar_Turno
             dateTimeFechaFin.Visible = false;
             labelFechaEspecifica.Visible = true;
             Box_fechaACancelar.Visible = true;
-            dateTimeFechaInicio.MinDate = DateTime.Now;
-            Box_fechaACancelar.MinDate = DateTime.Now;
+            dateTimeFechaInicio.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            dateTimeFechaInicio.Value = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            Box_fechaACancelar.MinDate = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            Box_fechaACancelar.Value = Convert.ToDateTime(ConfigurationManager.AppSettings["FechaSistema"]);
+            dateTimeFechaFin.Value = dateTimeFechaInicio.Value.AddDays(30);
             interfaz.cargarComboIDValor(comboBox1, "select t.Id_tipo_cancelacion id, t.Descripcion valor from TRIGGER_EXPLOSION.TipoCancelacion t");
-            
+            interfaz.agregarElementoTextoAChequear(richTextMotivo);
+            interfaz.agregarElementoComboBoxAChequear(comboBox1);
         
         }
 

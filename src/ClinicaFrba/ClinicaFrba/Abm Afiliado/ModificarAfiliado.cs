@@ -8,15 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace ClinicaFrba.Abm_Afiliado
 {
     public partial class ModificarAfiliado : Form
     {
         Interfaz.Interfaz interfaz = new Interfaz.Interfaz();
-        Int32 afiliadoAModificar;
+        Int64 afiliadoAModificar;
 
-        public ModificarAfiliado(Int32 id_afiliado)
+        public ModificarAfiliado(Int64 id_afiliado)
         {
             InitializeComponent();
             this.afiliadoAModificar = id_afiliado;
@@ -33,7 +35,11 @@ namespace ClinicaFrba.Abm_Afiliado
             parametros.Add(new SqlParameter("descripcion_plan_medico", comboBoxPlanMedico.Text));
             parametros.Add(new SqlParameter("motivo_modificacion", txtMotivoModificacion.Text));
             parametros.Add(new SqlParameter("id_afiliado", afiliadoAModificar));
+            parametros.Add(new SqlParameter("fecha_modif", ConfigurationManager.AppSettings["FechaSistema"]));
 
+
+            parametros.RemoveAll( param => String.IsNullOrWhiteSpace(param.Value.ToString()));
+            parametros.RemoveAll(param => param.Value.ToString() == "Seleccione una opción ....");
             ManejadorConexiones.ExecuteQuery("TRIGGER_EXPLOSION.modificar_afiliado", parametros);
             MessageBox.Show("Afiliado modificado con exito");
             this.Close();
@@ -49,6 +55,16 @@ namespace ClinicaFrba.Abm_Afiliado
             this.comboBoxSexo.Items.Add("masculino");
             this.comboBoxSexo.Items.Add("femenino");
            
+        }
+
+        private void Box_telefono_Leave(object sender, EventArgs e)
+        {
+            if (!Regex.IsMatch(Box_telefono.Text, @"^\d+$"))
+            {
+                MessageBox.Show("Este campo solo admite valores numericos");
+                Box_telefono.Text = "";
+                return;
+            }
         }
     }
 }

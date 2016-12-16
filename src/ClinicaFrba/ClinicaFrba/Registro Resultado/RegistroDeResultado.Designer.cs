@@ -41,6 +41,10 @@
             this.Sintomas = new System.Windows.Forms.RichTextBox();
             this.ll = new System.Windows.Forms.Label();
             this.Asistencia = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // Documento
@@ -87,7 +91,7 @@
             // 
             // Aceptar
             // 
-            this.Aceptar.Location = new System.Drawing.Point(117, 229);
+            this.Aceptar.Location = new System.Drawing.Point(115, 287);
             this.Aceptar.Name = "Aceptar";
             this.Aceptar.Size = new System.Drawing.Size(75, 23);
             this.Aceptar.TabIndex = 8;
@@ -124,7 +128,7 @@
             // 
             // Diagnosticar
             // 
-            this.Diagnosticar.Location = new System.Drawing.Point(596, 242);
+            this.Diagnosticar.Location = new System.Drawing.Point(596, 287);
             this.Diagnosticar.Name = "Diagnosticar";
             this.Diagnosticar.Size = new System.Drawing.Size(75, 23);
             this.Diagnosticar.TabIndex = 11;
@@ -161,11 +165,56 @@
             this.Asistencia.UseVisualStyleBackColor = true;
             this.Asistencia.CheckedChanged += new System.EventHandler(this.Asistencia_CheckedChanged);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.Gray;
+            this.label2.Location = new System.Drawing.Point(46, 219);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(267, 13);
+            this.label2.TabIndex = 15;
+            this.label2.Text = "Debe ingresar los datos del paciente, luego ACEPTAR ";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.ForeColor = System.Drawing.Color.Gray;
+            this.label5.Location = new System.Drawing.Point(46, 244);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(175, 13);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "para poder completar el diagnostico";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.ForeColor = System.Drawing.Color.Gray;
+            this.label6.Location = new System.Drawing.Point(167, 121);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(75, 13);
+            this.label6.TabIndex = 17;
+            this.label6.Text = "AAAA-MM-DD";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.ForeColor = System.Drawing.Color.Gray;
+            this.label7.Location = new System.Drawing.Point(177, 160);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(44, 13);
+            this.label7.TabIndex = 18;
+            this.label7.Text = "HH:MM";
+            // 
             // RegistrarResultado
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(729, 308);
+            this.ClientSize = new System.Drawing.Size(729, 414);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.Asistencia);
             this.Controls.Add(this.ll);
             this.Controls.Add(this.Sintomas);
@@ -180,7 +229,8 @@
             this.Controls.Add(this.Fecha);
             this.Controls.Add(this.Documento);
             this.Name = "RegistrarResultado";
-            this.Text = "Form1";
+            this.Text = "Registro de Diagnostico Paciente";
+            this.Load += new System.EventHandler(this.RegistrarResultado_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -201,5 +251,9 @@
         private System.Windows.Forms.RichTextBox Sintomas;
         private System.Windows.Forms.Label ll;
         private System.Windows.Forms.CheckBox Asistencia;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }

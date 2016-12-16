@@ -45,6 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abm Afiliado\AltaFamiliar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Abm Afiliado\AltaFamiliar.Designer.cs">
+      <DependentUpon>AltaFamiliar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Abm Afiliado\Documento.cs" />
     <Compile Include="Abm Afiliado\ABM_Afiliado_Inicio.cs">
       <SubType>Form</SubType>
@@ -95,6 +101,30 @@
     </Compile>
     <Compile Include="AbmRol\ABMRol.Designer.cs">
       <DependentUpon>ABMRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmRol\CrearRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\CrearRol.Designer.cs">
+      <DependentUpon>CrearRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmRol\EliminarRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\EliminarRol.Designer.cs">
+      <DependentUpon>EliminarRol.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmRol\GestionarRoles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\GestionarRoles.Designer.cs">
+      <DependentUpon>GestionarRoles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AbmRol\ModificarRol.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AbmRol\ModificarRol.Designer.cs">
+      <DependentUpon>ModificarRol.cs</DependentUpon>
     </Compile>
     <Compile Include="AbmRol\RepositorioFuncionalidades.cs" />
     <Compile Include="Cancelar Turno\AfiliadoCancelarTurno.cs">
@@ -234,6 +264,9 @@
     <EmbeddedResource Include="Abm Afiliado\AltaAfiliado.resx">
       <DependentUpon>AltaAfiliado.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Abm Afiliado\AltaFamiliar.resx">
+      <DependentUpon>AltaFamiliar.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Abm Afiliado\AltaUsuario.resx">
       <DependentUpon>AltaUsuario.cs</DependentUpon>
     </EmbeddedResource>
@@ -245,6 +278,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AbmRol\ABMRol.resx">
       <DependentUpon>ABMRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\CrearRol.resx">
+      <DependentUpon>CrearRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\EliminarRol.resx">
+      <DependentUpon>EliminarRol.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\GestionarRoles.resx">
+      <DependentUpon>GestionarRoles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AbmRol\ModificarRol.resx">
+      <DependentUpon>ModificarRol.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Cancelar Turno\AfiliadoCancelarTurno.resx">
       <DependentUpon>AfiliadoCancelarTurno.cs</DependentUpon>

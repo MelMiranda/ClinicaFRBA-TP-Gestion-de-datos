@@ -20,6 +20,7 @@ namespace ClinicaFrba
         public static SqlConnection conectar()
         {
 
+            
             if (sqlConnection.State == System.Data.ConnectionState.Open)
             {
                 return sqlConnection;
@@ -59,8 +60,8 @@ namespace ClinicaFrba
             SqlDataAdapter adapter = null;
             try
             {
-                sqlConnection.Open();
-                adapter = new SqlDataAdapter(procedureName, sqlConnection);
+             
+                adapter = new SqlDataAdapter(procedureName, conectar());
                 adapter.SelectCommand.Parameters.AddRange(parameters.ToArray());
                 adapter.SelectCommand.CommandType = CommandType.StoredProcedure;
                 DataTable data = new DataTable();
@@ -74,6 +75,7 @@ namespace ClinicaFrba
             finally
             {
                 if (adapter != null) adapter.SelectCommand.Connection.Close();
+                desconectar();
             }
 
         }

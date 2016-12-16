@@ -175,12 +175,14 @@ namespace ClinicaFrba
                 {
                     reader.Read();
                     Int32 id = Convert.ToInt32(reader["Id_usuario"]);
+                    sqlCommand.Dispose();
                     ManejadorConexiones.desconectar();
                     this.Id_usuario = id;
                     return id;
                 }
                 else
                 {
+                    sqlCommand.Dispose();
                     ManejadorConexiones.desconectar();
                     return 0;
                 }
@@ -339,6 +341,25 @@ namespace ClinicaFrba
                        
                 }
 
+            }
+        }
+
+
+
+        public int getAfiliadoId()
+        {
+            String query = "select Id_afiliado from TRIGGER_EXPLOSION.Afiliado where Id_usuario = @id";
+
+            SqlCommand cmd = new SqlCommand(query,ManejadorConexiones.conectar());
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = this.Id_usuario;
+
+            using(var reader = cmd.ExecuteReader()){
+
+                if (reader.Read())
+                {
+                    return Convert.ToInt32(reader["Id_afiliado"]);
+                }
+                else return -1;
             }
         }
 

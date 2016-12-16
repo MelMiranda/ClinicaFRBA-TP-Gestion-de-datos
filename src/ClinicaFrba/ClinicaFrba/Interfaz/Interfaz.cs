@@ -16,12 +16,42 @@ namespace ClinicaFrba.Interfaz
         public static  Usuario usuario { get; set; }
         public static List<Especialidad> especialidades { get; set; }
         public static List<Profesional> profesionales { get; set; }
+        private List<Control> elementosTextoQueNoDebenEstarIncompletos = new List<Control>();
+        private List<ComboBox> elementosComboBoxQueNoDebenEstarIncompletos = new List<ComboBox>();
 
         public Interfaz(){}
 
         public static void login(Usuario usuario)
         {
             Interfaz.usuario = usuario;
+        }
+
+        public bool elementosEstanIncompletos()
+        {
+            // Nota, it works
+            if (elementosComboBoxQueNoDebenEstarIncompletos.Count() == 0)
+            {
+                return elementosTextoQueNoDebenEstarIncompletos.TrueForAll(elem => String.IsNullOrEmpty(elem.Text));
+            }
+            else
+            {
+                if (
+                    elementosTextoQueNoDebenEstarIncompletos.TrueForAll(elem => !String.IsNullOrEmpty(elem.Text))
+                    && elementosComboBoxQueNoDebenEstarIncompletos.TrueForAll(elem => elem.SelectedIndex > 0)
+                    ) return false;
+
+                return true;
+            }
+        }
+
+        public void agregarElementoTextoAChequear(Control elem)
+        {
+            this.elementosTextoQueNoDebenEstarIncompletos.Add(elem);
+        }
+
+        public void agregarElementoComboBoxAChequear(ComboBox elem)
+        {
+            this.elementosComboBoxQueNoDebenEstarIncompletos.Add(elem);
         }
 
 
@@ -141,6 +171,57 @@ namespace ClinicaFrba.Interfaz
             }
 
             return profesionales;
+        }
+
+
+
+        public static void agregarTurno(int id_afiliado, int id_profesional, DateTime fecha, int especialidad  )
+        {
+            using (SqlConnection sqlConnection = ManejadorConexiones.conectar())
+            {
+                String query = "INSERT INTO  TRIGGER_EXPLOSION.Turno (Id_afiliado, Id_profesional, Fecha_programada, Especialidad_id) VALUES (@afiliado, @profesional, @fecha, @especialidad)";
+                using (var cmd = new SqlCommand(query, sqlConnection))
+                {
+                    cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = fecha;
+                    cmd.Parameters.Add("@afiliado", SqlDbType.Int).Value = id_afiliado;
+                    cmd.Parameters.Add("@profesional", SqlDbType.Int).Value = id_profesional;
+                    cmd.Parameters.Add("@especialidad", SqlDbType.Int).Value = especialidad;
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        mostrarMensaje("El turno ha sido guardado!");
+
+                    }
+                    catch (Exception e)
+                    {
+                        mostrarMensaje("No se pudo guardar el turno, seleccione otra fecha");
+                    }
+                   
+
+                }
+            }
+        }
+
+        public static bool turno_disponible(DateTime date, int id_medico, int id_especialidad)
+        {
+            
+                String query = "SELECT  TRIGGER_EXPLOSION.FX_get_Disponibilidad(@fecha, @id, @especialidad)";
+                SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar());
+                cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = date;
+                cmd.Parameters.Add("@id", SqlDbType.Int).Value = id_medico;
+                cmd.Parameters.Add("@especialidad", SqlDbType.Int).Value = id_especialidad;
+
+                   int disponible = (int) cmd.ExecuteScalar();
+
+                   cmd.Dispose();
+                   ManejadorConexiones.desconectar();
+                   if (disponible == 1) return true;
+                   else return false;
+
+                
+            
+
         }
 
         public static List<Profesional> getProfesionalesPorEspecialidad(string id_especialidad)

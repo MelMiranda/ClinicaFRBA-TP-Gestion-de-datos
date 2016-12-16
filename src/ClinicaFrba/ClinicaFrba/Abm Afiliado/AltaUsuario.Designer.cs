@@ -50,6 +50,7 @@
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(92, 20);
             this.txtUsername.TabIndex = 34;
+            this.txtUsername.TextChanged += new System.EventHandler(this.txtUsername_TextChanged);
             // 
             // label5
             // 
@@ -93,7 +94,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Name = "AltaUsuario";
-            this.Text = "Form2";
+            this.Text = "Alta de Usuario";
             this.Load += new System.EventHandler(this.AltaUsuario_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -56,7 +56,8 @@ namespace ClinicaFrba.Abm_Rol
         private string getFuncionalidades(string Id_Rol)
         {
             string result = "";
-            SqlCommand cmd = new SqlCommand("TRIGGER_EXPLOSION.SP_getFuncDelRol", ManejadorConexiones.conectar());
+            //TODO CRASHEA ACA, getFuncDelRol es una funcion y no un procedimiento
+            SqlCommand cmd = new SqlCommand("TRIGGER_EXPLOSION.getFuncDelRol", ManejadorConexiones.conectar());
             cmd.CommandType = CommandType.StoredProcedure;
 
             cmd.Parameters.Add(new SqlParameter("@Id_Rol", Id_Rol));

@@ -164,7 +164,7 @@
             this.Controls.Add(this.labelFechaEspecifica);
             this.Controls.Add(this.Box_fechaACancelar);
             this.Name = "MedicoCancelarTurno";
-            this.Text = "Form1";
+            this.Text = "Cancelacion de Turnos";
             this.Load += new System.EventHandler(this.MedicoCancelarTurno_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

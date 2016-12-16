@@ -38,7 +38,7 @@ namespace ClinicaFrba.Estadisticas
 
             }
             else
-            {
+            { 
                 meses.Add(7, "Julio");
                 meses.Add(8, "Agosto");
                 meses.Add(9, "Septiembre");
@@ -56,20 +56,51 @@ namespace ClinicaFrba.Estadisticas
         {
             if (cboAño.Text != "" && cboEspecialidad.Text != "" && cboPlan.Text != "" && cboMes.Text != "")
             {
-                
-                SqlCommand cargar = new SqlCommand("TRIGGER_EXPLOSION.ProfesionalesConsultados", ManejadorConexiones.conectar());
-                cargar.CommandType = CommandType.StoredProcedure;
-                cargar.Parameters.Add("@Plan", SqlDbType.Decimal).Value = cboPlan.SelectedValue;
-                cargar.Parameters.Add("@Especialidad", SqlDbType.Decimal).Value = cboEspecialidad.SelectedValue;
-                cargar.Parameters.Add("@Semestre", SqlDbType.Int).Value = int.Parse(cboSemestre.Text);
-                cargar.Parameters.Add("@Mes", SqlDbType.Int).Value = cboMes.SelectedValue;
-                cargar.Parameters.Add("@Año", SqlDbType.VarChar).Value = cboAño.Text;
-                SqlDataAdapter adapter = new SqlDataAdapter(cargar);
-                DataTable table = new DataTable();
-                adapter.Fill(table);
-                dataGridView1.DataSource = table;
-                ManejadorConexiones.desconectar();
-                
+
+                DataTable dt = new DataTable();
+
+                int mes, planId, especialidadId, semestre, anio;
+                try
+                {
+                    mes = Convert.ToInt32(cboMes.SelectedValue.ToString());
+                    planId = Convert.ToInt32(cboPlan.SelectedValue.ToString());
+                    especialidadId = Convert.ToInt32(cboEspecialidad.SelectedValue.ToString());
+                    semestre = int.Parse(cboSemestre.Text);
+                    anio = Convert.ToInt32(cboAño.Text);
+                }
+                catch (Exception ex)
+                {
+                    Interfaz.Interfaz.mostrarMensaje("Verifique que los campos insertados sean correctos");
+                    return;
+                }
+
+
+
+                String query = "select * from TRIGGER_EXPLOSION.ProfesionalesConsultados(@Plan,@Especialidad,@Semestre,@Mes,@Anio)";
+                SqlCommand cmd = new SqlCommand(query, ManejadorConexiones.conectar());
+                cmd.Parameters.Add("@Plan", SqlDbType.Int).Value = planId;
+                cmd.Parameters.Add("@Especialidad", SqlDbType.Int).Value = especialidadId;
+                cmd.Parameters.Add("@Semestre", SqlDbType.Int).Value = semestre;
+                cmd.Parameters.Add("@Mes", SqlDbType.Int).Value = mes;
+                cmd.Parameters.Add("@Anio", SqlDbType.Int).Value = anio;
+               
+                using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                {
+                    adapter.Fill(dt);
+                    if (dt.Rows.Count == 0)
+                    {
+                        Interfaz.Interfaz.mostrarMensaje("No se han encontrado resultados!");
+                    }
+                    else
+                    {
+                        dataGridView1.DataSource = dt;
+                    }
+                    cmd.Dispose();
+                    ManejadorConexiones.desconectar();
+
+
+                }
+
             }
             else
             {

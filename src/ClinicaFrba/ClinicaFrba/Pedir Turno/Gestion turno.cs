@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,21 +15,76 @@ namespace ClinicaFrba.Pedir_Turno
     {
 
         List<Especialidad> especialidades = new List<Especialidad>();
+        Especialidad especialidadSeleccionada;
+        Profesional profesionalSeleccionado;
+        DateTime fechaSeleccionada;
+        DateTime horaSeleccionada;
+
 
         public Gestion_turno()
         {
             InitializeComponent();
+            comboBox__profesional.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox_especialidad.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox_Fechas.DropDownStyle = ComboBoxStyle.DropDownList;
+            comboBox_Horarios.DropDownStyle = ComboBoxStyle.DropDownList;
             cargarEspecialidades();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            if (!validarCampos())
+            {
+                Interfaz.Interfaz.mostrarMensaje("Por favor seleccione todos los campos");
+                return;
+            }
 
+            if (horaSeleccionada == null || !(horaSeleccionada.Hour >= 7 && horaSeleccionada.Hour < 20))
+            {
+                Interfaz.Interfaz.mostrarMensaje("Seleccione un horario");
+                return;
+            }
+            DateTime fechaCompleta = new DateTime(fechaSeleccionada.Year, fechaSeleccionada.Month, fechaSeleccionada.Day,
+                                                    horaSeleccionada.Hour, horaSeleccionada.Minute, horaSeleccionada.Second);
+
+        
+         bool disponible =  Interfaz.Interfaz.turno_disponible(fechaCompleta, 
+         Convert.ToInt32(profesionalSeleccionado.id), Convert.ToInt32(especialidadSeleccionada.id));
+
+           if (disponible)
+           {  
+               int idAfiliado = Interfaz.Interfaz.usuario.getAfiliadoId();
+               Interfaz.Interfaz.agregarTurno(idAfiliado,Convert.ToInt32(profesionalSeleccionado.id),
+                                fechaCompleta,Convert.ToInt32(especialidadSeleccionada.id));
+               
+
+           }
+           else Interfaz.Interfaz.mostrarMensaje("Horario no disponible!");
+
+          
+           this.Close();
+        }
+
+
+        private bool validarCampos()
+        {
+            if (comboBox__profesional.SelectedItem != null && comboBox_especialidad.SelectedItem != null
+                    && comboBox_Fechas.SelectedItem != null && comboBox_Horarios.SelectedItem != null)
+            {
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+                    
         }
 
 
 
         private void cargarEspecialidades()
+
         {
             especialidades =  Interfaz.Interfaz.getEspecialidades();
 
@@ -44,6 +100,7 @@ namespace ClinicaFrba.Pedir_Turno
             comboBox_especialidad.SelectedIndex = 0;
 
             comboBox_especialidad.SelectedIndexChanged += new System.EventHandler(EspecialidadesSelectedIndexChanged);
+            comboBox_especialidad.SelectedIndex = 1;
 
       
 
@@ -53,8 +110,8 @@ namespace ClinicaFrba.Pedir_Turno
         //Funcion llamada cada vez que se selecciona una especialidad
         private void EspecialidadesSelectedIndexChanged(object sender, System.EventArgs e)
         {
-            Especialidad selected = (Especialidad)comboBox_especialidad.SelectedItem;
-            cargarProfesionalesPorEspecialidad(selected.id);
+            especialidadSeleccionada = (Especialidad)comboBox_especialidad.SelectedItem;
+            cargarProfesionalesPorEspecialidad(especialidadSeleccionada.id);
 
         }
 
@@ -66,6 +123,92 @@ namespace ClinicaFrba.Pedir_Turno
             comboBox__profesional.DataSource = list;
             comboBox__profesional.SelectedIndex = 0;
 
+            comboBox__profesional.SelectedIndexChanged += new System.EventHandler(ProfesionalSelectedIndexChanged);
+
+           
+             comboBox_Fechas.SelectedIndexChanged += new System.EventHandler(FechaSelectedIndexChanged);
+            
         }
+
+
+        private void FechaSelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            fechaSeleccionada = (DateTime)comboBox_Fechas.SelectedItem;
+            cargarHorariosDelProfesional();
+        }
+
+        private void ProfesionalSelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            profesionalSeleccionado = (Profesional)comboBox__profesional.SelectedItem;
+            cargarFechasDisponiblesDelProfesional();
+        }
+
+        //carga solo las fechas sin los horarios
+        private void cargarFechasDisponiblesDelProfesional()
+        {
+            List<DateTime> fechasLibre = profesionalSeleccionado.getHorariosLibre(especialidadSeleccionada.nombre);
+            List<DateTime> fechasSinHorarios = new List<DateTime>();
+
+            foreach (DateTime fecha in fechasLibre){
+                if(!fechasSinHorarios.Contains(fecha.Date))
+                fechasSinHorarios.Add(fecha.Date);
+            }
+            comboBox_Fechas.DataSource = fechasSinHorarios;
+        }
+
+
+
+        private void cargarHorariosDelProfesional()
+        {
+            List<DateTime> fechasLibre = profesionalSeleccionado.getHorariosLibre(especialidadSeleccionada.nombre);
+            List<String> horarios = new List<String>();
+
+            DateTime fecha = fechaSeleccionada;
+            fecha =  fecha.AddHours(7);
+            while (fecha.Date == fechaSeleccionada.Date)
+            {
+                DateTime otraFecha = new DateTime(fecha.Year, fecha.Month, fecha.Day, fecha.Hour,fecha.Minute,fecha.Second);
+                if (fechasLibre.Contains(otraFecha))
+                {
+                    if (fecha.Minute < 10)
+                    {
+                        horarios.Add(fecha.Hour + ":" + "0" + fecha.Minute);
+                    }
+                    else
+                    {
+                        horarios.Add(fecha.Hour + ":" + fecha.Minute);
+                    }
+                                      
+                }
+                fecha = fecha.AddMinutes(30);
+
+            }
+
+            comboBox_Horarios.DataSource = horarios;
+        
+            comboBox_Horarios.SelectedIndexChanged += new System.EventHandler(HorarioSelectedIndexChanged);
+            comboBox_Horarios.SelectedIndex = 0;
+           
+        }
+
+
+        private void HorarioSelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            String seleccion =  (String) comboBox_Horarios.SelectedItem;
+           horaSeleccionada =  Convert.ToDateTime(seleccion);
+           Console.WriteLine("hora seleccionada");
+        }
+
+        private void comboBox_especialidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Gestion_turno_Load(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }

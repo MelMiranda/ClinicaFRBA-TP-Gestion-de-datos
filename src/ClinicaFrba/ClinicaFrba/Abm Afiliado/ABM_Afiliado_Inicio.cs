@@ -14,7 +14,7 @@ namespace ClinicaFrba.Abm_Afiliado
     public partial class ABM_Afiliado_Inicio : Form
     {
         public int FilaSeleccionada { get; set; }
-        Int32 id_afiliado;
+        Int64 id_afiliado;
 
 
         public ABM_Afiliado_Inicio()
@@ -29,13 +29,18 @@ namespace ClinicaFrba.Abm_Afiliado
 
         private void botonAltaAfiliado_Click(object sender, EventArgs e)
         {
+
             AltaAfiliado altaUsuario = new AltaAfiliado();
             altaUsuario.ShowDialog();
         }
 
         private void botonBajaAfiliado_Click(object sender, EventArgs e)
         {
-            
+            if (FilaSeleccionada == -1)
+            {
+                MessageBox.Show("Por favor, seleccione primero un elemento de la grilla");
+                return;
+            }
             List<SqlParameter> parametros = new List<SqlParameter>();
             parametros.Add(new SqlParameter("id_afiliado", id_afiliado));
             String bajaAfiliado = "TRIGGER_EXPLOSION.baja_afiliado";
@@ -51,12 +56,13 @@ namespace ClinicaFrba.Abm_Afiliado
 
         private void ABM_Afiliado_Inicio_Load(object sender, EventArgs e)
         {
+            FilaSeleccionada = -1;
             this.getAfiliados();
         }
 
         private void getAfiliados() 
         {
-            Int32 habilitado = checkBox1.Checked ? 1 : 0;
+            Int64 habilitado = checkBox1.Checked ? 1 : 0;
             String afiliados = "select * from TRIGGER_EXPLOSION.Afiliado WHERE Habilitado = " + habilitado;
             this.cargarGrilla(afiliados);
         }
@@ -85,7 +91,7 @@ namespace ClinicaFrba.Abm_Afiliado
         private void grilla_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             this.FilaSeleccionada = e.RowIndex;
-            id_afiliado = Convert.ToInt32(grilla.Rows[FilaSeleccionada].Cells["Id_afiliado"].Value.ToString());
+            id_afiliado = Convert.ToInt64(grilla.Rows[FilaSeleccionada].Cells["Id_afiliado"].Value.ToString());
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -95,6 +101,11 @@ namespace ClinicaFrba.Abm_Afiliado
 
         private void buttonModificarAfiliado_Click(object sender, EventArgs e)
         {
+            if (FilaSeleccionada == -1)
+            {
+                MessageBox.Show("Por favor, seleccione primero un elemento de la grilla");
+                return;
+            }
             ModificarAfiliado modificarAfiliado = new ModificarAfiliado(this.id_afiliado);
             modificarAfiliado.Show();
         }

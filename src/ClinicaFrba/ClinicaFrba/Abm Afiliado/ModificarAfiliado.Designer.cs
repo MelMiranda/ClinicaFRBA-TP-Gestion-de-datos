@@ -48,7 +48,7 @@
             // comboBoxPlanMedico
             // 
             this.comboBoxPlanMedico.FormattingEnabled = true;
-            this.comboBoxPlanMedico.Location = new System.Drawing.Point(389, 207);
+            this.comboBoxPlanMedico.Location = new System.Drawing.Point(365, 207);
             this.comboBoxPlanMedico.Name = "comboBoxPlanMedico";
             this.comboBoxPlanMedico.Size = new System.Drawing.Size(92, 21);
             this.comboBoxPlanMedico.TabIndex = 72;
@@ -56,7 +56,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(232, 216);
+            this.label3.Location = new System.Drawing.Point(208, 216);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(66, 13);
@@ -66,7 +66,7 @@
             // comboBoxEstadoCivil
             // 
             this.comboBoxEstadoCivil.FormattingEnabled = true;
-            this.comboBoxEstadoCivil.Location = new System.Drawing.Point(389, 180);
+            this.comboBoxEstadoCivil.Location = new System.Drawing.Point(365, 180);
             this.comboBoxEstadoCivil.Name = "comboBoxEstadoCivil";
             this.comboBoxEstadoCivil.Size = new System.Drawing.Size(92, 21);
             this.comboBoxEstadoCivil.TabIndex = 70;
@@ -74,7 +74,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(232, 189);
+            this.label2.Location = new System.Drawing.Point(208, 189);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 13);
@@ -83,7 +83,7 @@
             // 
             // Box_direccion
             // 
-            this.Box_direccion.Location = new System.Drawing.Point(389, 155);
+            this.Box_direccion.Location = new System.Drawing.Point(365, 155);
             this.Box_direccion.Margin = new System.Windows.Forms.Padding(2);
             this.Box_direccion.Name = "Box_direccion";
             this.Box_direccion.Size = new System.Drawing.Size(92, 20);
@@ -92,7 +92,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(232, 162);
+            this.label1.Location = new System.Drawing.Point(208, 162);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 13);
@@ -112,14 +112,14 @@
             // comboBoxSexo
             // 
             this.comboBoxSexo.FormattingEnabled = true;
-            this.comboBoxSexo.Location = new System.Drawing.Point(389, 126);
+            this.comboBoxSexo.Location = new System.Drawing.Point(365, 126);
             this.comboBoxSexo.Name = "comboBoxSexo";
             this.comboBoxSexo.Size = new System.Drawing.Size(92, 21);
             this.comboBoxSexo.TabIndex = 65;
             // 
             // Box_mail
             // 
-            this.Box_mail.Location = new System.Drawing.Point(389, 97);
+            this.Box_mail.Location = new System.Drawing.Point(365, 97);
             this.Box_mail.Margin = new System.Windows.Forms.Padding(2);
             this.Box_mail.Name = "Box_mail";
             this.Box_mail.Size = new System.Drawing.Size(92, 20);
@@ -127,16 +127,17 @@
             // 
             // Box_telefono
             // 
-            this.Box_telefono.Location = new System.Drawing.Point(389, 67);
+            this.Box_telefono.Location = new System.Drawing.Point(365, 67);
             this.Box_telefono.Margin = new System.Windows.Forms.Padding(2);
             this.Box_telefono.Name = "Box_telefono";
             this.Box_telefono.Size = new System.Drawing.Size(92, 20);
             this.Box_telefono.TabIndex = 60;
+            this.Box_telefono.Leave += new System.EventHandler(this.Box_telefono_Leave);
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(232, 135);
+            this.label10.Location = new System.Drawing.Point(208, 135);
             this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(31, 13);
@@ -146,7 +147,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(232, 101);
+            this.label7.Location = new System.Drawing.Point(208, 101);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(26, 13);
@@ -156,7 +157,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(232, 71);
+            this.label6.Location = new System.Drawing.Point(208, 71);
             this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(49, 13);
@@ -166,12 +167,12 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(232, 244);
+            this.label4.Location = new System.Drawing.Point(208, 244);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(102, 13);
+            this.label4.Size = new System.Drawing.Size(337, 13);
             this.label4.TabIndex = 74;
-            this.label4.Text = "Motivo Modificacion";
+            this.label4.Text = "Motivo Modificacion (Solo necesario si se modifica el plan del afiliado))";
             // 
             // txtMotivoModificacion
             // 

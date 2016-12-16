@@ -16,8 +16,10 @@ Repo para el trabajo practico de la Cátedra Gestión de Datos de la Universidad
 <b>1)</b>Tomamos como una semana de lunes a sabado <br>
 <b>2)</b>En la agenda del medico para seleccionar el rango de fechas disponible tomamos como referencia dos fechas: desde que comienza a estar disponible hasta que deja de estar disponible (CONSULTAR ESTO)<br>
 <b>3)</b>Para la migracion de usuarios tomamos como username el DNI de los pacientes y medicos ya que es lo unico que los diferencia univocamente<br>
-<b>4)</b>La cantidad de intentos fallidos se guarda localmente en la aplicacion, la base de datos solo sabe si el usuario esta habilitado o inhabilitado<br>
+<b>4)</b>Consulta Medica y Turno comparten el mismo ID<br>
 <b>5)</b>Diseño de la agenda: La tabla Dias disponible indica para cada dia de la semana en que rango horario atiende el medico y con que especialidad, puede repetirse el dia de la semana para un mismo medico si cambia la especialidad. La tabla de horarios por dia indica el horario de un turno, y el id del mismo, asi sabemos en que horarios el medico tiene turnos asignados<br>
+<b>5)</b>Afiliado almacena un contador de cantidad de consultas medicas, cuando se concreta una consulta se setea en el bono la consulta medica y se actualiza el contador en el afiliado<br>
+
 
 </p>
 
